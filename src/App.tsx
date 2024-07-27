@@ -11,6 +11,7 @@ export default function App() {
   const [targetWord, setTargetWord] = useState("");
   const [currentGuess, setCurrentGuess] = useState("");
   const [isOver, setIsOver] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const handleType = (event: KeyboardEvent) => {
@@ -18,9 +19,11 @@ export default function App() {
       if (isOver) {
         return;
       }
+      if (message) setMessage("");
 
       if (event.key === "Enter") {
         if (currentGuess.length !== WORD_LENGTH) {
+          setMessage("not enough characters");
           return;
         }
 
@@ -33,6 +36,7 @@ export default function App() {
       const isCorrect = targetWord === currentGuess;
       if (isCorrect) {
         setIsOver(true);
+        setMessage("Genius");
       }
 
       if (event.key === "Backspace") {
@@ -68,6 +72,9 @@ export default function App() {
   return (
     <div className="App">
       {targetWord}
+      <div className="message">
+        <h4>{message}</h4>
+      </div>
       <div className="wrapper">
         {guesses.map((guess, i) => {
           const isCurrentGuess = i === guesses.findIndex((val) => val == null);
@@ -100,10 +107,10 @@ const GuessRow = ({ guess, isFinal, targetWord }: GuessRowProps) => {
     if (isFinal) {
       if (char === targetWord[i]) {
         className += " correct";
-      }else if( targetWord.includes(char)){
-        className += ' close'
-      }else {
-        className += ' incorrect'
+      } else if (targetWord.includes(char)) {
+        className += " close";
+      } else {
+        className += " incorrect";
       }
     }
     tiles.push(

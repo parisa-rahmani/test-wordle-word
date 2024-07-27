@@ -3,6 +3,11 @@
   text-align: center;
 }
 
+.message {
+  height: 24px;
+  line-height: 0;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
