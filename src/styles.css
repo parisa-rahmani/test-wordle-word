@@ -1,0 +1,20 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.row {
+  display: flex;
+  gap: 5px;
+}
+
+.tile {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000;
+}
