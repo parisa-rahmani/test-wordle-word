@@ -6,7 +6,7 @@ const API_URL = `https://random-word-api.herokuapp.com/word?number=100&length=${
 
 export default function App() {
   const [guesses, setGuesses] = useState<(string | null)[]>(
-    Array(6).fill(null)
+    Array(6).fill(null),
   );
   const [targetWord, setTargetWord] = useState("");
   const [currentGuess, setCurrentGuess] = useState("");
@@ -23,6 +23,11 @@ export default function App() {
         if (currentGuess.length !== WORD_LENGTH) {
           return;
         }
+
+        const newGuesses = [...guesses];
+        newGuesses[guesses.findIndex((val) => val == null)] = currentGuess;
+        setGuesses(newGuesses);
+        setCurrentGuess("");
       }
 
       const isCorrect = targetWord === currentGuess;
@@ -46,7 +51,7 @@ export default function App() {
 
     window.addEventListener("keydown", handleType);
     return () => window.removeEventListener("keydown", handleType);
-  }, [currentGuess]);
+  }, [currentGuess, targetWord, isOver]);
 
   useEffect(() => {
     const getWords = async () => {
@@ -67,28 +72,44 @@ export default function App() {
         {guesses.map((guess, i) => {
           const isCurrentGuess = i === guesses.findIndex((val) => val == null);
           return (
-            <GuessRow key={i} guess={isCurrentGuess ? currentGuess : guess} />
+            <GuessRow
+              key={i}
+              guess={isCurrentGuess ? currentGuess : guess}
+              targetWord={targetWord}
+              isFinal={!isCurrentGuess && guesses[i] != null}
+            />
           );
         })}
       </div>
-      {currentGuess}
     </div>
   );
 }
 
 type GuessRowProps = {
   guess: string | null;
+  targetWord: string;
+  isFinal: boolean;
 };
 
-const GuessRow = ({ guess }: GuessRowProps) => {
+const GuessRow = ({ guess, isFinal, targetWord }: GuessRowProps) => {
   const tiles = [];
 
   for (let i = 0; i < WORD_LENGTH; i++) {
     const char = guess?.[i];
+    let className = "tile";
+    if (isFinal) {
+      if (char === targetWord[i]) {
+        className += " correct";
+      }else if( targetWord.includes(char)){
+        className += ' close'
+      }else {
+        className += ' incorrect'
+      }
+    }
     tiles.push(
-      <div key={i} className="tile">
+      <div key={i} className={className}>
         {char}
-      </div>
+      </div>,
     );
   }
 

@@ -18,3 +18,13 @@
   height: 40px;
   border: 1px solid #000;
 }
+
+.incorrect {
+  background-color: gray;
+}
+.correct {
+  background-color: lightgreen;
+}
+.close {
+  background-color: rgb(227, 224, 34);
+}
